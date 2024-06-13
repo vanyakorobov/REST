@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Spring Security Example</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-4">
+    <h1 class="display-4 text-center" id="welcomeMessage">Loading...</h1>
+</div>
+
+<script>
+    // Функция для загрузки приветственного сообщения с сервера
+    async function fetchWelcomeMessage() {
+        try {
+            let response = await fetch('/api/welcome');
+            if (response.ok) {
+                let message = await response.text();
+                document.getElementById('welcomeMessage').innerText = message;
+            } else {
+                console.error('Failed to load welcome message:', response.statusText);
+                document.getElementById('welcomeMessage').innerText = 'Failed to load welcome message.';
+            }
+        } catch (error) {
+            console.error('Error fetching welcome message:', error);
+            document.getElementById('welcomeMessage').innerText = 'Error fetching welcome message.';
+        }
+    }
+
+    // Загрузка приветственного сообщения при загрузке страницы
+    document.addEventListener('DOMContentLoaded', fetchWelcomeMessage);
+</script>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
