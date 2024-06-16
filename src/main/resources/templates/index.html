@@ -1,39 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Spring Security Example</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <meta charset="UTF-8"> <!-- Установка кодировки символов в UTF-8 -->
+    <title>Spring Security Example</title> <!-- Заголовок страницы -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> <!-- Подключение стилей Bootstrap -->
 </head>
 <body>
-<div class="container mt-4">
-    <h1 class="display-4 text-center" id="welcomeMessage">Loading...</h1>
+<div class="container mt-4"> <!-- Контейнер Bootstrap с верхним отступом -->
+    <h1 class="display-4 text-center" id="welcomeMessage">Loading...</h1> <!-- Заголовок страницы с центровкой и текстом "Loading..." -->
 </div>
 
 <script>
     // Функция для загрузки приветственного сообщения с сервера
     async function fetchWelcomeMessage() {
         try {
-            let response = await fetch('/api/welcome');
-            if (response.ok) {
-                let message = await response.text();
-                document.getElementById('welcomeMessage').innerText = message;
+            let response = await fetch('/welcome'); // Отправка запроса на сервер для получения приветственного сообщения
+            if (response.ok) { // Если запрос выполнен успешно
+                let message = await response.text(); // Преобразование ответа в текст
+                document.getElementById('welcomeMessage').innerText = message; // Обновление текста приветственного сообщения
             } else {
-                console.error('Failed to load welcome message:', response.statusText);
-                document.getElementById('welcomeMessage').innerText = 'Failed to load welcome message.';
+                console.error('Failed to load welcome message:', response.statusText); // Логирование ошибки при неудачном запросе
+                document.getElementById('welcomeMessage').innerText = 'Failed to load welcome message.'; // Отображение сообщения об ошибке
             }
         } catch (error) {
-            console.error('Error fetching welcome message:', error);
-            document.getElementById('welcomeMessage').innerText = 'Error fetching welcome message.';
+            console.error('Error fetching welcome message:', error); // Логирование ошибки при исключении
+            document.getElementById('welcomeMessage').innerText = 'Error fetching welcome message.'; // Отображение сообщения об ошибке
         }
     }
 
     // Загрузка приветственного сообщения при загрузке страницы
-    document.addEventListener('DOMContentLoaded', fetchWelcomeMessage);
+    document.addEventListener('DOMContentLoaded', fetchWelcomeMessage); // Добавление обработчика события загрузки страницы
 </script>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script> <!-- Подключение jQuery -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script> <!-- Подключение Popper.js -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> <!-- Подключение скриптов Bootstrap -->
 </body>
 </html>

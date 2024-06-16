@@ -1,107 +1,107 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Update User</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <meta charset="UTF-8"> <!-- Установка кодировки символов в UTF-8 -->
+    <title>Update User</title> <!-- Заголовок страницы -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> <!-- Подключение стилей Bootstrap -->
 </head>
 <body>
-<div class="container mt-4">
-    <h1>Update User</h1>
-    <form id="updateUserForm">
-        <input type="hidden" id="userId" />
-        <div class="form-group">
-            <label for="name">Name:</label>
-            <input type="text" id="name" class="form-control" required />
+<div class="container mt-4"> <!-- Контейнер Bootstrap с верхним отступом -->
+    <h1>Update User</h1> <!-- Заголовок страницы -->
+    <form id="updateUserForm"> <!-- Форма для обновления данных пользователя -->
+        <input type="hidden" id="userId" /> <!-- Скрытое поле для хранения ID пользователя -->
+        <div class="form-group"> <!-- Группа элементов формы -->
+            <label for="name">Name:</label> <!-- Метка для поля ввода имени -->
+            <input type="text" id="name" class="form-control" required /> <!-- Поле ввода имени -->
         </div>
-        <div class="form-group">
-            <label for="age">Age:</label>
-            <input type="number" id="age" class="form-control" required />
+        <div class="form-group"> <!-- Группа элементов формы -->
+            <label for="age">Age:</label> <!-- Метка для поля ввода возраста -->
+            <input type="number" id="age" class="form-control" required /> <!-- Поле ввода возраста -->
         </div>
-        <div class="form-group">
-            <label>Roles:</label>
+        <div class="form-group"> <!-- Группа элементов формы -->
+            <label>Roles:</label> <!-- Метка для ролей пользователя -->
             <br/>
-            <div id="rolesContainer"></div>
+            <div id="rolesContainer"></div> <!-- Контейнер для чекбоксов ролей -->
         </div>
-        <div class="form-group">
-            <label for="password">Password:</label>
-            <input type="password" id="password" class="form-control" required />
+        <div class="form-group"> <!-- Группа элементов формы -->
+            <label for="password">Password:</label> <!-- Метка для поля ввода пароля -->
+            <input type="password" id="password" class="form-control" required /> <!-- Поле ввода пароля -->
         </div>
-        <button type="submit" class="btn btn-primary">Update</button>
+        <button type="submit" class="btn btn-primary">Update</button> <!-- Кнопка отправки формы -->
     </form>
 </div>
 
 <script>
-    // Fetch user data and roles
+    // Функция для загрузки данных пользователя и ролей
     async function fetchUserData(userId) {
         try {
-            let response = await fetch(`/api/users/${userId}`);
-            let user = await response.json();
-            document.getElementById('userId').value = user.id;
-            document.getElementById('name').value = user.name;
-            document.getElementById('age').value = user.age;
-            document.getElementById('password').value = ''; // Clear the password field
-            loadRoles(user.roles);
+            let response = await fetch(`/api/users/${userId}`); // Запрос данных пользователя по ID
+            let user = await response.json(); // Преобразование ответа в JSON
+            document.getElementById('userId').value = user.id; // Установка ID пользователя в скрытое поле
+            document.getElementById('name').value = user.name; // Установка имени пользователя в поле ввода
+            document.getElementById('age').value = user.age; // Установка возраста пользователя в поле ввода
+            document.getElementById('password').value = ''; // Очистка поля пароля
+            loadRoles(user.roles); // Загрузка ролей пользователя
         } catch (error) {
-            console.error('Error fetching user data:', error);
+            console.error('Error fetching user data:', error); // Логирование ошибки при получении данных пользователя
         }
     }
 
-    // Fetch all roles and set the roles checkboxes
+    // Функция для загрузки всех ролей и установки чекбоксов ролей
     async function loadRoles(selectedRoles) {
         try {
-            let response = await fetch('/api/roles');
-            let roles = await response.json();
-            let rolesContainer = document.getElementById('rolesContainer');
-            rolesContainer.innerHTML = ''; // Clear previous roles
-            roles.forEach(role => {
-                let isChecked = selectedRoles.some(selectedRole => selectedRole.id === role.id);
+            let response = await fetch('/api/roles'); // Запрос всех ролей
+            let roles = await response.json(); // Преобразование ответа в JSON
+            let rolesContainer = document.getElementById('rolesContainer'); // Получение контейнера для ролей
+            rolesContainer.innerHTML = ''; // Очистка предыдущих ролей
+            roles.forEach(role => { // Проход по всем ролям
+                let isChecked = selectedRoles.some(selectedRole => selectedRole.id === role.id); // Проверка, выбрана ли роль
                 rolesContainer.innerHTML += `
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" value="${role.id}" id="role${role.id}" ${isChecked ? 'checked' : ''}>
                     <label class="form-check-label" for="role${role.id}">${role.name}</label>
                 </div>
-            `;
+            `; // Добавление чекбокса для каждой роли
             });
         } catch (error) {
-            console.error('Error fetching roles:', error);
+            console.error('Error fetching roles:', error); // Логирование ошибки при получении ролей
         }
     }
 
-    // Handle form submission
+    // Обработчик отправки формы
     document.getElementById('updateUserForm').addEventListener('submit', async function (event) {
-        event.preventDefault();
-        let userId = document.getElementById('userId').value;
-        let name = document.getElementById('name').value;
-        let age = document.getElementById('age').value;
-        let password = document.getElementById('password').value;
-        let roles = Array.from(document.querySelectorAll('#rolesContainer input:checked')).map(input => ({ id: input.value }));
+        event.preventDefault(); // Предотвращение стандартного действия формы
+        let userId = document.getElementById('userId').value; // Получение ID пользователя
+        let name = document.getElementById('name').value; // Получение имени пользователя
+        let age = document.getElementById('age').value; // Получение возраста пользователя
+        let password = document.getElementById('password').value; // Получение пароля пользователя
+        let roles = Array.from(document.querySelectorAll('#rolesContainer input:checked')).map(input => ({ id: input.value })); // Получение выбранных ролей
 
-        let user = { id: userId, name, age, password, roles };
+        let user = { id: userId, name, age, password, roles }; // Создание объекта пользователя
 
         try {
-            await fetch(`/api/users/${userId}`, {
-                method: 'PUT',
+            await fetch(`/users/${userId}`, {
+                method: 'PUT', // Метод HTTP-запроса
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json' // Установка заголовка типа содержимого
                 },
-                body: JSON.stringify(user)
+                body: JSON.stringify(user) // Преобразование объекта пользователя в JSON
             });
-            alert('User updated successfully');
+            alert('User updated successfully'); // Уведомление об успешном обновлении пользователя
         } catch (error) {
-            console.error('Error updating user:', error);
+            console.error('Error updating user:', error); // Логирование ошибки при обновлении пользователя
         }
     });
 
-    // Example of how to fetch and populate the user form on page load
+    // Пример загрузки данных пользователя при загрузке страницы
     document.addEventListener('DOMContentLoaded', function () {
-        const userId = 1; // Replace with actual user id
-        fetchUserData(userId);
+        const userId = 1; // Замена на фактический ID пользователя
+        fetchUserData(userId); // Вызов функции загрузки данных пользователя
     });
 </script>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script> <!-- Подключение jQuery -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script> <!-- Подключение Popper.js -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> <!-- Подключение скриптов Bootstrap -->
 </body>
 </html>

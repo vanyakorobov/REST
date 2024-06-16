@@ -1,64 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>User Information</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <meta charset="UTF-8"> <!-- Установка кодировки символов в UTF-8 -->
+    <title>User Information</title> <!-- Заголовок страницы -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> <!-- Подключение стилей Bootstrap -->
 </head>
 <body>
-<div class="container mt-4">
-    <form method="POST" action="/logout" class="mb-4">
-        <button type="submit" class="btn btn-danger">Exit</button>
+<div class="container mt-4"> <!-- Контейнер Bootstrap с верхним отступом -->
+    <form method="POST" action="/logout" class="mb-4"> <!-- Форма для выхода с отступом снизу -->
+        <button type="submit" class="btn btn-danger">Exit</button> <!-- Кнопка выхода -->
     </form>
 
-    <table class="table table-bordered">
-        <caption><h2>User Info</h2></caption>
-        <thead class="thead-dark">
+    <table class="table table-bordered"> <!-- Таблица с границами -->
+        <caption><h2>User Info</h2></caption> <!-- Заголовок таблицы -->
+        <thead class="thead-dark"> <!-- Заголовок таблицы с темным фоном -->
         <tr>
-            <th>id</th>
-            <th>username</th>
-            <th>age</th>
-            <th>roles</th>
+            <th>id</th> <!-- Столбец для ID -->
+            <th>username</th> <!-- Столбец для имени пользователя -->
+            <th>age</th> <!-- Столбец для возраста -->
+            <th>roles</th> <!-- Столбец для ролей -->
         </tr>
         </thead>
-        <tbody id="userInfo">
+        <tbody id="userInfo"> <!-- Тело таблицы для информации о пользователе -->
         </tbody>
     </table>
 
-    <button class="btn btn-primary mt-3" onclick="window.location.href = '/to_main'">Home</button>
+    <button class="btn btn-primary mt-3" onclick="window.location.href = '/to_main'">Home</button> <!-- Кнопка для перехода на главную страницу -->
 </div>
 
 <script>
     // Функция для загрузки данных пользователя с сервера
     async function fetchUserInfo() {
         try {
-            let response = await fetch('/user');
-            if (response.ok) {
-                let user = await response.json();
+            let response = await fetch('/user'); // Отправка запроса на сервер для получения данных пользователя
+            if (response.ok) { // Если запрос выполнен успешно
+                let user = await response.json(); // Преобразование ответа в JSON
                 document.getElementById('userInfo').innerHTML = `
                     <tr>
-                        <td>${user.id}</td>
-                        <td>${user.username}</td>
-                        <td>${user.age}</td>
-                        <td>${user.roles.map(role => role.name).join(', ')}</td>
+                        <td>${user.id}</td> <!-- Заполнение ID пользователя -->
+                        <td>${user.username}</td> <!-- Заполнение имени пользователя -->
+                        <td>${user.age}</td> <!-- Заполнение возраста пользователя -->
+                        <td>${user.roles.map(role => role.name).join(', ')}</td> <!-- Заполнение ролей пользователя -->
                     </tr>
                 `;
             } else {
-                console.error('Failed to load user info:', response.statusText);
-                document.getElementById('userInfo').innerHTML = '<tr><td colspan="4">Failed to load user info.</td></tr>';
+                console.error('Failed to load user info:', response.statusText); // Логирование ошибки при неудачном запросе
+                document.getElementById('userInfo').innerHTML = '<tr><td colspan="4">Failed to load user info.</td></tr>'; // Отображение сообщения об ошибке
             }
         } catch (error) {
-            console.error('Error fetching user info:', error);
-            document.getElementById('userInfo').innerHTML = '<tr><td colspan="4">Error fetching user info.</td></tr>';
+            console.error('Error fetching user info:', error); // Логирование ошибки при исключении
+            document.getElementById('userInfo').innerHTML = '<tr><td colspan="4">Error fetching user info.</td></tr>'; // Отображение сообщения об ошибке
         }
     }
 
     // Загрузка информации о пользователе при загрузке страницы
-    document.addEventListener('DOMContentLoaded', fetchUserInfo);
+    document.addEventListener('DOMContentLoaded', fetchUserInfo); // Добавление обработчика события загрузки страницы
 </script>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script> <!-- Подключение jQuery -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script> <!-- Подключение Popper.js -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> <!-- Подключение скриптов Bootstrap -->
 </body>
 </html>
