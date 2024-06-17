@@ -6,11 +6,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
 import ru.kata.spring.boot_security.demo.service.UserServiceImpl;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,21 +45,26 @@ public class AdminController {
         }
     }
 
-    @PostMapping("/addUser")
+    @PostMapping("/users")
     public ResponseEntity<User> addUser(@RequestBody User user) {
         userService.saveUser(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }
 
-    @GetMapping("/allUsers")
+    @GetMapping("/users")
     public ResponseEntity<List<User>> allUsers(Authentication auth) {
         List<User> users = userService.getAllUsers();
         return ResponseEntity.ok(users);
     }
 
-    @PostMapping("/update")
+    @PatchMapping("/users/{id}")
     public ResponseEntity<User> updateUser(@RequestBody User user) {
         userService.saveUser(user);
         return ResponseEntity.ok(user);
+    }
+
+    @GetMapping("/roles")
+    public ResponseEntity<Collection<Role>> getAllRoles() {
+        return new ResponseEntity<>(roleService.getAllRoles(), HttpStatus.OK);
     }
 }

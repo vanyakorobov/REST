@@ -1,64 +1,76 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
 <head>
-    <meta charset="UTF-8"> <!-- Установка кодировки символов в UTF-8 -->
-    <title>User Information</title> <!-- Заголовок страницы -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> <!-- Подключение стилей Bootstrap -->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
+          integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+
+    <title>User</title>
 </head>
+<style>
+    #navbarUser {
+        margin-left: 0px;
+    }
+    #v-pills-tab {
+        border-radius: 5px;
+    }
+    #v-pills-user-tab {
+        outline: none;
+    }
+</style>
 <body>
-<div class="container mt-4"> <!-- Контейнер Bootstrap с верхним отступом -->
-    <form method="POST" action="/logout" class="mb-4"> <!-- Форма для выхода с отступом снизу -->
-        <button type="submit" class="btn btn-danger">Exit</button> <!-- Кнопка выхода -->
-    </form>
 
-    <table class="table table-bordered"> <!-- Таблица с границами -->
-        <caption><h2>User Info</h2></caption> <!-- Заголовок таблицы -->
-        <thead class="thead-dark"> <!-- Заголовок таблицы с темным фоном -->
-        <tr>
-            <th>id</th> <!-- Столбец для ID -->
-            <th>username</th> <!-- Столбец для имени пользователя -->
-            <th>age</th> <!-- Столбец для возраста -->
-            <th>roles</th> <!-- Столбец для ролей -->
-        </tr>
-        </thead>
-        <tbody id="userInfo"> <!-- Тело таблицы для информации о пользователе -->
-        </tbody>
-    </table>
+<header>
+    <nav class="navbar navbar-dark bg-dark mb-3">
+    <span class="navbar-brand" id="navbarUser">
+    </span>
+        <form th:action="@{/logout}" th:method="POST">
+            <button type="submit" class="btn btn-outline-dark" style="color: lightgrey">Logout</button>
+        </form>
+    </nav>
+</header>
 
-    <button class="btn btn-primary mt-3" onclick="window.location.href = '/to_main'">Home</button> <!-- Кнопка для перехода на главную страницу -->
+<div class="d-flex align-items-start">
+    <div class="col-2">
+        <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+            <button class="nav-link active" id="v-pills-user-tab" data-bs-toggle="pill" data-bs-target="#v-pills-user"
+                    type="button" role="tab" aria-controls="v-pills-user" aria-selected="true">User
+            </button>
+        </div>
+    </div>
+
+    <div class="col-10">
+        <div class="tab-content" id="v-pills-tabContent">
+            <div class="tab-pane fade show active" id="v-pills-user" role="tabpanel" aria-labelledby="v-pills-user-tab">
+                <h1 class="h2">User information-page </h1>
+                <h4>About user</h4>
+                <br>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Age</th>
+                        <th>Role</th>
+                    </tr>
+                    </thead>
+                    <tbody id="tableUser">
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 
-<script>
-    // Функция для загрузки данных пользователя с сервера
-    async function fetchUserInfo() {
-        try {
-            let response = await fetch('/user'); // Отправка запроса на сервер для получения данных пользователя
-            if (response.ok) { // Если запрос выполнен успешно
-                let user = await response.json(); // Преобразование ответа в JSON
-                document.getElementById('userInfo').innerHTML = `
-                    <tr>
-                        <td>${user.id}</td> <!-- Заполнение ID пользователя -->
-                        <td>${user.username}</td> <!-- Заполнение имени пользователя -->
-                        <td>${user.age}</td> <!-- Заполнение возраста пользователя -->
-                        <td>${user.roles.map(role => role.name).join(', ')}</td> <!-- Заполнение ролей пользователя -->
-                    </tr>
-                `;
-            } else {
-                console.error('Failed to load user info:', response.statusText); // Логирование ошибки при неудачном запросе
-                document.getElementById('userInfo').innerHTML = '<tr><td colspan="4">Failed to load user info.</td></tr>'; // Отображение сообщения об ошибке
-            }
-        } catch (error) {
-            console.error('Error fetching user info:', error); // Логирование ошибки при исключении
-            document.getElementById('userInfo').innerHTML = '<tr><td colspan="4">Error fetching user info.</td></tr>'; // Отображение сообщения об ошибке
-        }
-    }
+<script type="text/javascript" src="/user.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-    // Загрузка информации о пользователе при загрузке страницы
-    document.addEventListener('DOMContentLoaded', fetchUserInfo); // Добавление обработчика события загрузки страницы
-</script>
-
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script> <!-- Подключение jQuery -->
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script> <!-- Подключение Popper.js -->
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> <!-- Подключение скриптов Bootstrap -->
 </body>
 </html>
