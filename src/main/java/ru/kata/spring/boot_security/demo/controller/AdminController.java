@@ -12,12 +12,13 @@ import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
 import ru.kata.spring.boot_security.demo.service.UserServiceImpl;
 
+import java.security.Principal;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/api")
 public class AdminController {
 
     private UserServiceImpl userService;
@@ -27,6 +28,11 @@ public class AdminController {
     public AdminController(UserService userService, RoleService roleService) {
         this.userService = (UserServiceImpl) userService;
         this.roleService = roleService;
+    }
+
+    @GetMapping("admin/showAccount")
+    public ResponseEntity<User> showInfoUser(Principal principal) {
+        return ResponseEntity.ok(userService.findByUsername(principal.getName()));
     }
 
     @DeleteMapping("/deleteUser/{id}")
@@ -51,7 +57,7 @@ public class AdminController {
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }
 
-    @GetMapping("/users")
+    @GetMapping("/admin/users")
     public ResponseEntity<List<User>> allUsers(Authentication auth) {
         List<User> users = userService.getAllUsers();
         return ResponseEntity.ok(users);
@@ -61,6 +67,12 @@ public class AdminController {
     public ResponseEntity<User> updateUser(@RequestBody User user) {
         userService.saveUser(user);
         return ResponseEntity.ok(user);
+    }
+
+    @GetMapping("admin/users/{id}")
+    public ResponseEntity<User> getUserById(@PathVariable("id") Long id) {
+        var user = userService.getUserById(id);
+        return new ResponseEntity<>(user.get(), HttpStatus.OK);
     }
 
     @GetMapping("/roles")

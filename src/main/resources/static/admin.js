@@ -1,4 +1,4 @@
-const URL = 'http://localhost:8080/admin/showAccount/';
+const URL = 'http://localhost:8080/api/admin/showAccount/';
 const navbarAdmin = document.getElementById('navbarAdmin');
 const tableUserAdmin = document.getElementById('tableAdmin');
 
@@ -17,7 +17,7 @@ function getCurrentAdmin() {
             <td>${rolesStringAdmin}</td>
             </tr>`;
             tableUserAdmin.innerHTML = data;
-            navbarAdmin.innerHTML = `<b><span>${userAdmin.email}</span></b>
+            navbarAdmin.innerHTML = `<b><span>${userAdmin.username}</span></b>
                              <span>with roles:</span>
                              <span>${rolesStringAdmin}</span>`;
         });
@@ -35,7 +35,7 @@ function rolesToStringForAdmin(roles) {
     return rolesString;
 }
 async function getUserById(id) {
-    let response = await fetch("http://localhost:8080/admin/users/" + id);
+    let response = await fetch("http://localhost:8080/api/admin/users/" + id);
     return await response.json();
 }
 
